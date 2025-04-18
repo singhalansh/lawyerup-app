@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useFirebase } from "../context/firebase"; // adjust path if needed
 import { db } from "../context/firebase"; // you'll need to export db from firebase file
-import { collection, addDoc, getDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDoc, doc, setDoc } from "firebase/firestore";
 
 const BookAppointmentModal = ({ isOpen, onClose, lawyer }) => {
   const { currentUser } = useFirebase();
@@ -9,19 +9,46 @@ const BookAppointmentModal = ({ isOpen, onClose, lawyer }) => {
   const [caseType, setCaseType] = useState("");
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       if (currentUser) {
-        const docRef = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setUserData({
-            name: data.name || "",
-            age: data.age || "",
-            gender: data.gender || "",
-          });
+        try {
+          const docRef = doc(db, "users", currentUser.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setUserData({
+              name: data.name || "",
+              age: data.age || "",
+              gender: data.gender || "",
+            });
+          } else {
+            // User document doesn't exist yet, create it with basic info
+            const newUserData = {
+              name: currentUser.displayName || "",
+              email: currentUser.email || "",
+              createdAt: new Date(),
+            };
+            await setDoc(docRef, newUserData);
+            setUserData({
+              name: newUserData.name,
+              age: "",
+              gender: "",
+            });
+          }
+          setError("");
+        } catch (err) {
+          console.error("Error fetching user data:", err);
+          setError("Could not load your profile data. Using default information.");
+          // Use information from auth if available
+          if (currentUser.displayName) {
+            setUserData(prev => ({
+              ...prev,
+              name: currentUser.displayName
+            }));
+          }
         }
       }
     };
@@ -34,10 +61,19 @@ const BookAppointmentModal = ({ isOpen, onClose, lawyer }) => {
       return;
     }
     
+    if (!currentUser) {
+      alert("You must be logged in to book an appointment");
+      return;
+    }
+    
     setIsLoading(true);
+    setError("");
+    
     try {
-      await addDoc(collection(db, "appointments"), {
-        uid: currentUser.uid,
+      // Create appointment data
+      const appointmentData = {
+        userId: currentUser.uid,
+        userEmail: currentUser.email,
         lawyerId: lawyer?.id,
         lawyerName: lawyer?.name,
         name: userData.name,
@@ -45,13 +81,18 @@ const BookAppointmentModal = ({ isOpen, onClose, lawyer }) => {
         gender: userData.gender,
         caseType,
         query,
+        status: "pending",
         createdAt: new Date(),
-      });
+      };
+      
+      // Add to appointments collection
+      await addDoc(collection(db, "appointments"), appointmentData);
+      
       alert("Appointment booked successfully!");
       onClose();
     } catch (error) {
       console.error("Error booking appointment:", error);
-      alert("Failed to book appointment. Please try again.");
+      setError("Failed to book appointment. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +104,7 @@ const BookAppointmentModal = ({ isOpen, onClose, lawyer }) => {
     <>
       {/* Modal Backdrop */}
       <div 
-        className="fixed inset-0 bg-black z-40 flex items-center justify-center"
+        className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center"
         onClick={onClose}
       >
         {/* Modal Content */}
@@ -83,14 +124,20 @@ const BookAppointmentModal = ({ isOpen, onClose, lawyer }) => {
             </button>
           </div>
           
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-md">
+              {error}
+            </div>
+          )}
+          
           {lawyer && (
             <div className="mb-4 pb-4 border-b border-gray-200 opacity-100">
               <div className="flex items-center">
                 <div className="mr-3">
                   <div className="h-12 w-12 rounded-full bg-teal-100 flex items-center justify-center">
-                    {lawyer.photoSrc ? (
+                    {lawyer.photoURL ? (
                       <img 
-                        src={lawyer.photoSrc} 
+                        src={lawyer.photoURL} 
                         alt={lawyer.name} 
                         className="h-12 w-12 rounded-full object-cover"
                       />
@@ -115,17 +162,37 @@ const BookAppointmentModal = ({ isOpen, onClose, lawyer }) => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                <p className="text-gray-800 border border-gray-300 rounded-md px-3 py-2 bg-gray-50">{userData.name || "Not provided"}</p>
+                <input
+                  type="text"
+                  value={userData.name}
+                  onChange={(e) => setUserData({...userData, name: e.target.value})}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
-                <p className="text-gray-800 border border-gray-300 rounded-md px-3 py-2 bg-gray-50">{userData.age || "Not provided"}</p>
+                <input
+                  type="number"
+                  value={userData.age}
+                  onChange={(e) => setUserData({...userData, age: e.target.value})}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                />
               </div>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
-              <p className="text-gray-800 border border-gray-300 rounded-md px-3 py-2 bg-gray-50">{userData.gender || "Not provided"}</p>
+              <select
+                value={userData.gender}
+                onChange={(e) => setUserData({...userData, gender: e.target.value})}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              >
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
             </div>
             
             <div>

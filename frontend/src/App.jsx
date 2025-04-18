@@ -9,56 +9,62 @@ import LawyerProfileSetup from "./components/LawyerProfileSetup.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx"; // Adjust path as needed
 import Dictionary from "./components/Dictionary.jsx";
 import UserProfile from "./components/UserProfile.jsx";
+import Meeting from "./components/Meeting.jsx";
+import TermsPage from "./components/TermsPage.jsx";
+import PrivacyPolicyPage from "./components/PrivacyPolicyPage.jsx";
 function App() {
-  return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/auth" element={<Auth />} />
-      <Route path="/" element={<HomePage />} />
-      <Route path="/dict" element={<Dictionary />} />
-      {/* Protected routes */}
-      <Route
-        path="/doc"
-        element={
-          <ProtectedRoute>
-            <DocAnalyzer />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/chat"
-        element={
-          <ProtectedRoute>
-            <Chatbot />
-          </ProtectedRoute>
-        }
-      />
-       <Route
-        path="/user"
-        element={
-          <ProtectedRoute>
-            <UserProfile />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/search-lawyers"
-        element={
-          <ProtectedRoute>
-            <SearchLawyers />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/lawyer-profile-update"
-        element={
-          <ProtectedRoute>
-            <LawyerProfileSetup />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  );
+    return (
+        <Routes>
+            {/* Public routes */}
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/dict" element={<Dictionary />} />
+            <Route path="/meeting" element={<Meeting />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            {/* Protected routes */}
+            <Route
+                path="/doc"
+                element={
+                    <ProtectedRoute>
+                        <DocAnalyzer />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/chat"
+                element={
+                    <ProtectedRoute>
+                        <Chatbot />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/user"
+                element={
+                    <ProtectedRoute>
+                        <UserProfile />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/search-lawyers"
+                element={
+                    <ProtectedRoute>
+                        <SearchLawyers />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/lawyer-profile-update"
+                element={
+                    <ProtectedRoute>
+                        <LawyerProfileSetup />
+                    </ProtectedRoute>
+                }
+            />
+        </Routes>
+    );
 }
 
 export default App;

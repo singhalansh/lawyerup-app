@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useFirebase } from "../context/firebase";
 import ProfileMenu from "./ProfileMenu";
@@ -18,7 +18,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const authhandler = () => {
     navigate("/auth");
-  }
+  };
   return (
     <>
       {/* Navbar */}
@@ -30,23 +30,39 @@ const Navbar = () => {
           </div>
           {/* Center Links */}
           <div className="hidden lg:flex space-x-10 text-lg font-semibold">
-            <a href="/" className="text-gray-700 hover:text-gray-900 relative group">
+            <a
+              href="/"
+              className="text-gray-700 hover:text-gray-900 relative group"
+            >
               Services
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="search-lawyers" className="text-gray-700 hover:text-gray-900 relative group">
+            <a
+              href="search-lawyers"
+              className="text-gray-700 hover:text-gray-900 relative group"
+            >
               Search
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="chat" className="text-gray-700 hover:text-gray-900 relative group">
-              AI Assistant
+            <a
+              href="chat"
+              className="text-gray-700 hover:text-gray-900 relative group"
+            >
+              NyayaBandhu
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="doc" className="text-gray-700 hover:text-gray-900 relative group">
-              AI Doc Analyser
+
+            <a
+              href="doc"
+              className="text-gray-700 hover:text-gray-900 relative group"
+            >
+              Doc review
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="dict" className="text-gray-700 hover:text-gray-900 relative group">
+            <a
+              href="dict"
+              className="text-gray-700 hover:text-gray-900 relative group"
+            >
               Legal Dictionary
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
             </a>
@@ -56,22 +72,29 @@ const Navbar = () => {
             {currentUser ? (
               <>
                 {
-                <button
-                  onClick={handleLogout}
-                  className="px-5 py-2 border  rounded-lg text-white bg-teal-600 hover:bg-teal-700"
-                >
-                  Logout
-                </button> }
-                  <div className="flex items-center gap-4">
-          <ProfileMenu />
-          </div>
+                  <button
+                    onClick={handleLogout}
+                    className="px-5 py-2 border  rounded-lg text-white bg-teal-600 hover:bg-teal-700"
+                  >
+                    Logout
+                  </button>
+                }
+                <div className="flex items-center gap-4">
+                  <ProfileMenu />
+                </div>
               </>
             ) : (
               <>
-                <button className="px-5 py-2 border border-gray-500 rounded-lg text-gray-700 hover:bg-gray-100" onClick={authhandler}>
+                <button
+                  className="px-5 py-2 border border-gray-500 rounded-lg text-gray-700 hover:bg-gray-100"
+                  onClick={authhandler}
+                >
                   Login
                 </button>
-                <button className="px-5 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700" onClick={authhandler}>
+                <button
+                  className="px-5 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+                  onClick={authhandler}
+                >
                   Sign Up
                 </button>
               </>
@@ -98,23 +121,38 @@ const Navbar = () => {
       >
         <div className="flex justify-between items-center border-b p-4">
           <img src="/logo.png" className="h-20 w-auto" alt="Sidebar Logo" />
-          <button onClick={() => setIsSidebarOpen(false)}><X size={24} /></button>
+          <button onClick={() => setIsSidebarOpen(false)}>
+            <X size={24} />
+          </button>
         </div>
         <nav className="flex flex-col space-y-4 p-6 text-lg">
-          <a href="#" className="text-gray-700 hover:text-gray-900 relative group">
+          <a
+            href="#"
+            className="text-gray-700 hover:text-gray-900 relative group"
+          >
             Services
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
           </a>
-          <a href="search-lawyers" className="text-gray-700 hover:text-gray-900 relative group">
+          <a
+            href="search-lawyers"
+            className="text-gray-700 hover:text-gray-900 relative group"
+          >
             Search
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
           </a>
-          <a href="chat" className="text-gray-700 hover:text-gray-900 relative group">
-            AI Assistant
+          <a
+            href="chat"
+            className="text-gray-700 hover:text-gray-900 relative group"
+          >
+            NyayaBandhu
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
           </a>
-          <a href="doc" className="text-gray-700 hover:text-gray-900 relative group">
-            AI Doc Analyser
+
+          <a
+            href="doc"
+            className="text-gray-700 hover:text-gray-900 relative group"
+          >
+            Doc review
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-teal-600 group-hover:w-full transition-all duration-300"></span>
           </a>
           {currentUser ? (
@@ -129,9 +167,9 @@ const Navbar = () => {
                 Logout
               </button> */}
 
-          <div className="flex items-center gap-4">
-          <ProfileMenu />
-          </div>
+              <div className="flex items-center gap-4">
+                <ProfileMenu />
+              </div>
             </>
           ) : (
             <>

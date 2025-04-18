@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { useFirebase } from "../context/firebase";
 
 const lawyerAnimation = "/lawyer-animation1.mp4";
 
@@ -14,10 +15,11 @@ const sectionVariants = {
 };
 
 function Hero() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const { currentUser } = useFirebase();
 
   const handleGetStarted = () => {
-    navigate("/auth"); 
+    navigate("/auth");
   };
 
   return (
@@ -44,24 +46,28 @@ function Hero() {
           className="max-w-lg ml-10"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-            Smart Legal Help,<br /> Right at Your Fingertips.
+            Smart Legal Help,
+            <br /> Right at Your Fingertips.
           </h1>
           <p className="mt-4 text-gray-600 text-lg">
-            Empowering individuals with AI-driven legal analysis, seamless chatbot support, and expert legal guidance—all in one place.
+            Empowering individuals with AI-driven legal analysis, seamless
+            chatbot support, and expert legal guidance—all in one place.
           </p>
-          <div className="mt-6 flex items-center gap-2">
-            <input
-              type="email"
-              placeholder="Your email"
-              className="px-4 py-3 border border-gray-300 rounded-md w-64 text-gray-800 focus:ring-2 focus:ring-teal-500 focus:outline-none"
-            />
-            <button
-              onClick={handleGetStarted}
-              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-md flex items-center"
-            >
-              Get Started <span className="ml-2">→</span>
-            </button>
-          </div>
+          {!currentUser && (
+            <div className="mt-6 flex items-center gap-2">
+              <input
+                type="email"
+                placeholder="Your email"
+                className="px-4 py-3 border border-gray-300 rounded-md w-64 text-gray-800 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+              />
+              <button
+                onClick={handleGetStarted}
+                className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-md flex items-center"
+              >
+                Get Started <span className="ml-2">→</span>
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>
