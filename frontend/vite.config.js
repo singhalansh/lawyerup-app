@@ -6,6 +6,11 @@ export default defineConfig({
   
   plugins: [react(),tailwindcss()],
   build: {
+    
+    target: 'esnext',
+    rollupOptions: {
+      // empty, but keeps it from using native modules
+    },
     outDir: '../public',  // This will place the build output in the public folder of Firebase Hosting
   },
 })
