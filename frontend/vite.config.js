@@ -11,7 +11,7 @@ export default defineConfig({
     rollupOptions: {
       // empty, but keeps it from using native modules
     },
-    outDir: '../public',  // This will place the build output in the public folder of Firebase Hosting
+    outDir: 'dist',  // This will place the build output in the public folder of Firebase Hosting
   },
 })
 
