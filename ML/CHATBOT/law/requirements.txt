@@ -10,3 +10,4 @@ langchain_experimental
 -e .
 langchain_google_genai
 gunicorn
+langchain_huggingface
