@@ -14,8 +14,5 @@ export default defineConfig({
     outDir: 'dist',  // This will place the build output in the public folder of Firebase Hosting
     
   },
-  server: {
-    historyApiFallback: true, // <-- needed for routing
-  }
 })
 
