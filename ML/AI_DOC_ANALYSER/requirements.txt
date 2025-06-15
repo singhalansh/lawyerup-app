@@ -1,9 +1,21 @@
-streamlit
-langchain
+# Core web and API
+flask
+flask-cors
+
+# Document processing
 PyPDF2
-langchain-community
-faiss-cpu
-langchain_google_genai
+
+# LLM and vector store
+langchain
+langchain-google-genai
 google-generativeai
+faiss-cpu
+
+# Utility
 python-dotenv
+
+# For local dev UI (optional, remove if not used)
+streamlit
+
+# For production server (optional, remove if not used)
 gunicorn
