@@ -1,13 +1,30 @@
-sentence-transformers == 2.2.2
-langchain
+# Core web and API
 flask
-pypdf
+flask-cors
+
+# Environment variables
 python-dotenv
-pinecone[grpc]
+
+# LangChain and LLM integrations
+langchain
+langchain-core
 langchain-pinecone
+langchain-groq
+langchain-huggingface
 langchain-community
-langchain_experimental
--e .
-langchain_google_genai
-gunicorn
-langchain_huggingface
+
+# Vector DB
+pinecone
+
+# Embeddings and Transformers
+sentence-transformers
+huggingface-hub
+transformers
+
+# ML dependencies
+scikit-learn
+scipy
+torch
+
+# Other
+Jinja2
