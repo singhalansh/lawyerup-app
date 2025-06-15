@@ -9,3 +9,4 @@ langchain-community
 langchain_experimental
 -e .
 langchain_google_genai
+gunicorn
